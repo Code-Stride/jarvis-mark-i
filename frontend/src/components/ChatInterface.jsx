@@ -98,6 +98,25 @@ export default function ChatInterface({
                     </div>
                   )}
 
+                  {/* Render generated AI images if present */}
+                  {msg.executedTools && msg.executedTools.map((t, i) => {
+                    if (t.tool === 'generate_ai_image' && t.result && t.result.image_url) {
+                      return (
+                        <div key={i} className="my-3 border-2 border-cyan-500/50 rounded-xl overflow-hidden bg-slate-950/80 shadow-[0_0_20px_rgba(0,243,255,0.2)]">
+                          <img
+                            src={t.result.image_url}
+                            alt={t.result.prompt}
+                            className="w-full max-h-72 object-cover"
+                          />
+                          <div className="px-3 py-1.5 bg-cyan-950/90 border-t border-cyan-500/30 text-[11px] font-mono text-cyan-200">
+                            PROMPT: {t.result.prompt}
+                          </div>
+                        </div>
+                      );
+                    }
+                    return null;
+                  })}
+
                   {/* Message body */}
                   <div className="whitespace-pre-wrap break-words">
                     {msg.content}

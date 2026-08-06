@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Terminal, Activity, Database, Zap, Settings as SettingsIcon, 
-  Volume2, VolumeX, Cpu, Shield, Sparkles, RefreshCw, Radio 
+  Volume2, VolumeX, Cpu, Shield, Sparkles, RefreshCw, Radio, Camera, Code2 
 } from 'lucide-react';
 
 import ArcReactor from './components/ArcReactor.jsx';
@@ -10,6 +10,8 @@ import ChatInterface from './components/ChatInterface.jsx';
 import TelemetryHUD from './components/TelemetryHUD.jsx';
 import MemoryDeck from './components/MemoryDeck.jsx';
 import AutomationDeck from './components/AutomationDeck.jsx';
+import VisionDeck from './components/VisionDeck.jsx';
+import CodeDeck from './components/CodeDeck.jsx';
 import SettingsModal from './components/SettingsModal.jsx';
 
 import { 
@@ -21,7 +23,7 @@ import {
 import { JarvisSpeechEngine } from './services/speech.js';
 
 export default function App() {
-  // Navigation State ("command", "telemetry", "memory", "automation")
+  // Navigation State ("command", "vision", "code", "telemetry", "memory", "automation")
   const [activeTab, setActiveTab] = useState('command');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
@@ -44,7 +46,6 @@ export default function App() {
   const speechEngineRef = useRef(null);
   const wsRef = useRef(null);
 
-  // Initialize Speech Engine and WebSocket on load
   useEffect(() => {
     // 1. Initialize Speech Engine
     speechEngineRef.current = new JarvisSpeechEngine({
@@ -81,7 +82,7 @@ export default function App() {
 
     // 4. Greeting message from J.A.R.V.I.S.
     setTimeout(() => {
-      const greetingText = `Good day, Sir. J.A.R.V.I.S. Mark I is online and operating at 100% capacity. How may I assist your projects today?`;
+      const greetingText = `Good day, Sir. J.A.R.V.I.S. Mark II Complete AI Desktop & Cloud Assistant is online with all 24 agentic features armed and operational. How may I assist your projects today?`;
       setMessages([
         {
           role: 'assistant',
@@ -125,7 +126,6 @@ export default function App() {
   };
 
   const handleChatResponse = (response) => {
-    // Append J.A.R.V.I.S. response to chat log
     setMessages((prev) => [
       ...prev,
       {
@@ -136,7 +136,6 @@ export default function App() {
       }
     ]);
 
-    // Update telemetry and memory if tools altered them
     if (response.telemetry) {
       setTelemetry(response.telemetry);
     }
@@ -144,7 +143,6 @@ export default function App() {
       fetchFacts().then((res) => setFacts(res.facts || []));
     }
 
-    // Speak response using Text-to-Speech
     if (speechEngineRef.current && voiceEnabled) {
       speechEngineRef.current.speak(response.response_text);
     }
@@ -153,7 +151,6 @@ export default function App() {
   const handleSendMessage = async (text) => {
     if (!text.trim()) return;
 
-    // Append user message immediately
     const userMsg = {
       role: 'user',
       content: text,
@@ -162,7 +159,6 @@ export default function App() {
     setMessages((prev) => [...prev, userMsg]);
 
     try {
-      // Send to FastAPI Backend
       const res = await sendChatMessage(text, activeEngine);
       handleChatResponse(res);
     } catch (err) {
@@ -213,7 +209,6 @@ export default function App() {
   const handleRunMacro = async (name) => {
     try {
       const res = await runMacro(name);
-      // Speak confirmation
       if (speechEngineRef.current && voiceEnabled) {
         speechEngineRef.current.speak(`Executing protocol ${name}, ${userName}.`);
       }
@@ -249,6 +244,36 @@ export default function App() {
     } catch (err) {
       console.error("Failed to save settings:", err);
     }
+  };
+
+  // Handler for Vision Analysis API call
+  const handleAnalyzeVision = async (payload) => {
+    const res = await fetch('/api/vision', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    return res.json();
+  };
+
+  // Handler for Document Forge API call
+  const handleGenerateDoc = async (docType, title, content) => {
+    const res = await fetch('/api/forge', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ doc_type: docType, title, content })
+    });
+    return res.json();
+  };
+
+  // Handler for AI Coding API call
+  const handleRunCode = async (language, prompt) => {
+    const res = await fetch('/api/code', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ language, prompt })
+    });
+    return res.json();
   };
 
   const toggleVoice = (enabled) => {
@@ -287,19 +312,21 @@ export default function App() {
             </div>
             <div>
               <h1 className="font-orbitron font-extrabold text-base sm:text-lg tracking-widest text-cyan-200">
-                J.A.R.V.I.S. <span className="text-xs text-cyan-400/80 font-normal">// MARK I CORE</span>
+                J.A.R.V.I.S. <span className="text-xs text-cyan-400/80 font-normal">// MARK II CORE</span>
               </h1>
               <div className="flex items-center gap-2 text-[11px] text-cyan-400/80 font-mono">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                <span>STATUS: {status} // v1.0.0 MARK I</span>
+                <span>STATUS: {status} // v2.0.0 (24 FEATURES ONLINE)</span>
               </div>
             </div>
           </div>
 
-          {/* Nav Tabs */}
-          <nav className="flex items-center gap-1.5 p-1 bg-slate-900/80 border border-cyan-500/30 rounded-xl">
+          {/* Nav Tabs (6 Futuristic Tabs) */}
+          <nav className="flex items-center gap-1.5 p-1 bg-slate-900/80 border border-cyan-500/30 rounded-xl overflow-x-auto max-w-full">
             {[
               { id: 'command', label: 'COMMAND DECK', icon: Terminal },
+              { id: 'vision', label: 'VISION & KINETIC', icon: Camera },
+              { id: 'code', label: 'CODE & DOCS FORGE', icon: Code2 },
               { id: 'telemetry', label: 'TELEMETRY HUD', icon: Activity },
               { id: 'memory', label: 'MEMORY BANKS', icon: Database },
               { id: 'automation', label: 'AUTOMATION', icon: Zap },
@@ -310,7 +337,7 @@ export default function App() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-orbitron text-xs tracking-wider uppercase transition-all ${
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-orbitron text-xs tracking-wider uppercase transition-all whitespace-nowrap ${
                     isActive
                       ? 'bg-cyan-500 text-slate-950 font-bold shadow-[0_0_15px_rgba(0,243,255,0.4)]'
                       : 'text-cyan-400/80 hover:text-cyan-200 hover:bg-cyan-950/50'
@@ -409,6 +436,17 @@ export default function App() {
           </div>
         )}
 
+        {activeTab === 'vision' && (
+          <VisionDeck onAnalyzeVision={handleAnalyzeVision} />
+        )}
+
+        {activeTab === 'code' && (
+          <CodeDeck
+            onGenerateDoc={handleGenerateDoc}
+            onRunCode={handleRunCode}
+          />
+        )}
+
         {activeTab === 'telemetry' && (
           <div className="space-y-6">
             <TelemetryHUD telemetry={telemetry} />
@@ -441,12 +479,12 @@ export default function App() {
       <footer className="bg-slate-950 border-t border-cyan-900/50 py-3 px-4 sm:px-8 text-[11px] font-mono text-cyan-400/70">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
           <div className="flex items-center gap-3">
-            <span>STARK INDUSTRIES // ARTIFICIAL INTELLIGENCE CORE — MARK I (v1.0.0)</span>
+            <span>STARK INDUSTRIES // ARTIFICIAL INTELLIGENCE CORE — MARK II (v2.0.0)</span>
             <span>|</span>
             <span className="text-cyan-300">USER: {userName.toUpperCase()}</span>
           </div>
           <div className="flex items-center gap-4">
-            <span>WEBSOCKET FEED: ACTIVE</span>
+            <span>24 AGENTIC PROTOCOLS ONLINE</span>
             <span>ALPHA-0 PROTOCOL</span>
           </div>
         </div>
