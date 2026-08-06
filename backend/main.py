@@ -81,6 +81,21 @@ class AdbConnectRequest(BaseModel):
     ip_address: str
     port: Optional[int] = 5555
 
+class PdfAnalysisRequest(BaseModel):
+    file_path: str
+
+class ResearchRequest(BaseModel):
+    query: str
+    generate_report: Optional[bool] = True
+
+class ImageGenerateRequest(BaseModel):
+    prompt: str
+
+class FileManagerRequest(BaseModel):
+    action: str
+    path: str
+    content: Optional[str] = None
+
 # --- REST Endpoints ---
 
 @app.get("/api/status")
@@ -230,6 +245,26 @@ def execute_mobile_control(request: MobileControlRequest):
 def connect_adb(request: AdbConnectRequest):
     """Connect to an Android device over Wi-Fi for Wireless ADB remote control."""
     return jarvis_tools.connect_mobile_adb(request.ip_address, request.port or 5555)
+
+@app.post("/api/pdf")
+def analyze_pdf_document(request: PdfAnalysisRequest):
+    """PDF Explanation & Summarization module."""
+    return jarvis_tools.analyze_pdf(request.file_path)
+
+@app.post("/api/research")
+def generate_research_report(request: ResearchRequest):
+    """Web Search & Research Report generation module."""
+    return jarvis_tools.web_search_research(request.query, generate_report=request.generate_report)
+
+@app.post("/api/image")
+def generate_ai_image_endpoint(request: ImageGenerateRequest):
+    """AI Image Generation module."""
+    return jarvis_tools.generate_ai_image(request.prompt)
+
+@app.post("/api/file")
+def execute_file_manager(request: FileManagerRequest):
+    """File & Folder Management module."""
+    return jarvis_tools.file_manager(request.action, request.path, request.content)
 
 @app.get("/api/settings")
 def get_settings():
