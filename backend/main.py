@@ -1,11 +1,23 @@
 import os
 import sys
+import subprocess
 from pathlib import Path
 
-# --- Render.com Node Runtime Python Package Bundling Support ---
+# --- Render Node Runtime Package Bundling & Self-Healing Bootstrap ---
 PYPACKAGES_DIR = Path(__file__).resolve().parent.parent / "pypackages"
 if PYPACKAGES_DIR.exists():
     sys.path.insert(0, str(PYPACKAGES_DIR))
+
+try:
+    import fastapi
+except ModuleNotFoundError:
+    print("FastAPI not found in current path. Executing self-healing bootstrap to install requirements...")
+    req_file = Path(__file__).resolve().parent.parent / "requirements.txt"
+    if req_file.exists():
+        subprocess.run([sys.executable, "-m", "pip", "install", "-r", str(req_file), "--target", str(PYPACKAGES_DIR)], check=False)
+        subprocess.run([sys.executable, "-m", "pip", "install", "-r", str(req_file), "--break-system-packages"], check=False)
+        if PYPACKAGES_DIR.exists():
+            sys.path.insert(0, str(PYPACKAGES_DIR))
 
 import asyncio
 import json
