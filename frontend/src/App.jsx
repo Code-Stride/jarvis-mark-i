@@ -319,20 +319,20 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#040914] text-cyan-400 font-mono antialiased hud-grid scanlines flex flex-col">
       {/* Top Navigation HUD Bar */}
-      <header className="sticky top-0 z-40 bg-slate-950/90 border-b border-cyan-500/30 backdrop-blur-lg px-4 sm:px-8 py-3">
+      <header className="sticky top-0 z-40 bg-slate-950/90 border-b border-cyan-500/40 backdrop-blur-md px-4 sm:px-8 py-3 shadow-[0_0_25px_rgba(0,243,255,0.15)]">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           {/* Logo & Status */}
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-cyan-950 border-2 border-cyan-400 flex items-center justify-center shadow-[0_0_15px_rgba(0,243,255,0.4)]">
+            <div className="w-9 h-9 rounded-full bg-cyan-950 border-2 border-cyan-400 flex items-center justify-center shadow-[0_0_15px_rgba(0,243,255,0.6)]">
               <span className="font-orbitron font-extrabold text-sm text-cyan-200">J</span>
             </div>
             <div>
-              <h1 className="font-orbitron font-extrabold text-base sm:text-lg tracking-widest text-cyan-200">
-                J.A.R.V.I.S. <span className="text-xs text-cyan-400/80 font-normal">// MARK III CORE</span>
+              <h1 className="font-orbitron font-extrabold text-base sm:text-lg tracking-widest text-cyan-200 stark-text-glow">
+                J.A.R.V.I.S. <span className="text-xs text-cyan-400/80 font-normal">// MARK III MCU CORE</span>
               </h1>
               <div className="flex items-center gap-2 text-[11px] text-cyan-400/80 font-mono">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                <span>STATUS: {status} // v3.0.0 (TOTAL MOBILE &amp; DESKTOP CONTROL)</span>
+                <span>STATUS: {status} // v3.0.0 (MCU IRON MAN HUD ONLINE)</span>
               </div>
             </div>
           </div>

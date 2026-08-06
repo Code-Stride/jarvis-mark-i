@@ -33,20 +33,26 @@ export default function ChatInterface({
   ];
 
   return (
-    <div className="flex flex-col h-[520px] bg-slate-900/70 border border-cyan-500/30 rounded-2xl overflow-hidden backdrop-blur-md shadow-[0_0_20px_rgba(0,243,255,0.1)]">
+    <div className="stark-panel flex flex-col h-[520px] overflow-hidden">
+      {/* Iron Man Visor Corner Markers */}
+      <div className="stark-corner-tl"></div>
+      <div className="stark-corner-tr"></div>
+      <div className="stark-corner-bl"></div>
+      <div className="stark-corner-br"></div>
+
       {/* Terminal Title Bar */}
-      <div className="flex items-center justify-between px-5 py-3 bg-slate-950/90 border-b border-cyan-900/50">
+      <div className="flex items-center justify-between px-5 py-3 bg-slate-950/90 border-b border-cyan-900/60">
         <div className="flex items-center gap-2.5">
           <Terminal className="w-4 h-4 text-cyan-400" />
-          <span className="font-orbitron text-xs uppercase tracking-widest text-cyan-200 font-bold">
-            J.A.R.V.I.S. // NEURAL DIALOGUE TERMINAL
+          <span className="font-orbitron text-xs uppercase tracking-widest text-cyan-200 font-bold stark-text-glow">
+            J.A.R.V.I.S. // MCU NEURAL DIALOGUE TERMINAL
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="px-2 py-0.5 bg-cyan-950/80 border border-cyan-500/30 rounded text-[10px] font-orbitron text-cyan-300 uppercase">
+          <span className="px-2.5 py-0.5 bg-cyan-950/90 border border-cyan-400/40 rounded text-[10px] font-orbitron text-cyan-300 uppercase">
             ACTIVE ENGINE: {activeEngine}
           </span>
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span>
         </div>
       </div>
 

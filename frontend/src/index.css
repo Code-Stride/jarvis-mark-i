@@ -5,20 +5,31 @@
 @layer base {
   body {
     font-family: 'Share Tech Mono', monospace;
-    background-color: #040914;
+    background-color: #030712;
     color: #00f3ff;
+    overflow-x: hidden;
   }
   h1, h2, h3, h4, .font-orbitron {
     font-family: 'Orbitron', sans-serif;
   }
 }
 
-/* Sci-fi HUD background grid & subtle scanline effect */
+/* MCU Iron Man Hologram Background Grid & Radial Glow */
 .hud-grid {
-  background-size: 40px 40px;
+  background-size: 36px 36px;
   background-image: 
-    linear-gradient(to right, rgba(0, 243, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 243, 255, 0.04) 1px, transparent 1px);
+    linear-gradient(to right, rgba(0, 243, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
+  background-color: #030712;
+}
+
+.radial-glow {
+  background: radial-gradient(
+    circle at 50% 25%,
+    rgba(0, 243, 255, 0.08) 0%,
+    rgba(3, 7, 18, 0.95) 75%,
+    #030712 100%
+  );
 }
 
 .scanlines {
@@ -26,24 +37,94 @@
     to bottom,
     rgba(255,255,255,0),
     rgba(255,255,255,0) 50%,
-    rgba(0, 243, 255, 0.08) 50%,
-    rgba(0, 243, 255, 0.08)
+    rgba(0, 243, 255, 0.07) 50%,
+    rgba(0, 243, 255, 0.07)
   );
   background-size: 100% 4px;
 }
 
-/* Custom scrollbar for HUD panels */
+/* MCU Iron Man Glassmorphism HUD Panel */
+.stark-panel {
+  background: rgba(6, 15, 33, 0.75);
+  border: 1px solid rgba(0, 243, 255, 0.35);
+  box-shadow: 0 0 25px rgba(0, 243, 255, 0.12), inset 0 0 15px rgba(0, 243, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border-radius: 1rem;
+  position: relative;
+}
+
+.stark-panel:hover {
+  border-color: rgba(0, 243, 255, 0.6);
+  box-shadow: 0 0 35px rgba(0, 243, 255, 0.2), inset 0 0 20px rgba(0, 243, 255, 0.08);
+}
+
+/* Corner Stark Visor Brackets */
+.stark-corner-tl {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 14px;
+  height: 14px;
+  border-top: 2px solid #00f3ff;
+  border-left: 2px solid #00f3ff;
+  border-top-left-radius: 6px;
+  pointer-events: none;
+}
+.stark-corner-tr {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 14px;
+  height: 14px;
+  border-top: 2px solid #00f3ff;
+  border-right: 2px solid #00f3ff;
+  border-top-right-radius: 6px;
+  pointer-events: none;
+}
+.stark-corner-bl {
+  position: absolute;
+  bottom: -1px;
+  left: -1px;
+  width: 14px;
+  height: 14px;
+  border-bottom: 2px solid #00f3ff;
+  border-left: 2px solid #00f3ff;
+  border-bottom-left-radius: 6px;
+  pointer-events: none;
+}
+.stark-corner-br {
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 14px;
+  height: 14px;
+  border-bottom: 2px solid #00f3ff;
+  border-right: 2px solid #00f3ff;
+  border-bottom-right-radius: 6px;
+  pointer-events: none;
+}
+
+/* Holographic text glow */
+.stark-text-glow {
+  text-shadow: 0 0 10px rgba(0, 243, 255, 0.7);
+}
+
+.gold-text-glow {
+  text-shadow: 0 0 10px rgba(255, 183, 3, 0.8);
+}
+
+/* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(4, 9, 20, 0.8);
+  background: rgba(3, 7, 18, 0.9);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 243, 255, 0.3);
+  background: rgba(0, 243, 255, 0.35);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 243, 255, 0.6);
+  background: rgba(0, 243, 255, 0.7);
 }
