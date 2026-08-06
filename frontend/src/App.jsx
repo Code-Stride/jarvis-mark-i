@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Terminal, Activity, Database, Zap, Settings as SettingsIcon, 
-  Volume2, VolumeX, Cpu, Shield, Sparkles, RefreshCw, Radio, Camera, Code2, Smartphone 
+  Volume2, VolumeX, Cpu, Shield, Sparkles, RefreshCw, Radio, Camera, Code2, Smartphone, ShieldCheck 
 } from 'lucide-react';
 
 import ArcReactor from './components/ArcReactor.jsx';
@@ -24,9 +24,9 @@ import {
 import { JarvisSpeechEngine } from './services/speech.js';
 
 export default function App() {
-  // Navigation State ("command", "mobile", "vision", "code", "telemetry", "memory", "automation")
   const [activeTab, setActiveTab] = useState('command');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [visorMode, setVisorMode] = useState(true);
 
   // Core App State
   const [status, setStatus] = useState('ONLINE');
@@ -78,7 +78,7 @@ export default function App() {
     loadInitialData();
 
     setTimeout(() => {
-      const greetingText = `Good day, Sir. J.A.R.V.I.S. Mark III Total Mobile & Desktop Controller is online. All 30 agentic mobile and desktop protocols are operational. How may I assist your projects today?`;
+      const greetingText = `Good day, Sir. Iron Man J.A.R.V.I.S. Mark III Holographic Helmet Visor HUD is online. All 30 agentic mobile and desktop protocols are armed. How may I assist your projects today?`;
       setMessages([
         {
           role: 'assistant',
@@ -242,7 +242,6 @@ export default function App() {
     }
   };
 
-  // Handler for Vision Analysis API call
   const handleAnalyzeVision = async (payload) => {
     const res = await fetch('/api/vision', {
       method: 'POST',
@@ -252,7 +251,6 @@ export default function App() {
     return res.json();
   };
 
-  // Handler for Document Forge API call
   const handleGenerateDoc = async (docType, title, content) => {
     const res = await fetch('/api/forge', {
       method: 'POST',
@@ -262,7 +260,6 @@ export default function App() {
     return res.json();
   };
 
-  // Handler for AI Coding API call
   const handleRunCode = async (language, prompt) => {
     const res = await fetch('/api/code', {
       method: 'POST',
@@ -272,7 +269,6 @@ export default function App() {
     return res.json();
   };
 
-  // Handler for Mobile Device Control API call
   const handleExecuteMobile = async (action, target, payload) => {
     const res = await fetch('/api/mobile', {
       method: 'POST',
@@ -282,7 +278,6 @@ export default function App() {
     return res.json();
   };
 
-  // Handler for Android Wireless ADB API call
   const handleConnectAdb = async (ipAddress) => {
     const res = await fetch('/api/adb', {
       method: 'POST',
@@ -317,202 +312,230 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#040914] text-cyan-400 font-mono antialiased hud-grid scanlines flex flex-col">
-      {/* Top Navigation HUD Bar */}
-      <header className="sticky top-0 z-40 bg-slate-950/90 border-b border-cyan-500/40 backdrop-blur-md px-4 sm:px-8 py-3 shadow-[0_0_25px_rgba(0,243,255,0.15)]">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          {/* Logo & Status */}
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-cyan-950 border-2 border-cyan-400 flex items-center justify-center shadow-[0_0_15px_rgba(0,243,255,0.6)]">
-              <span className="font-orbitron font-extrabold text-sm text-cyan-200">J</span>
-            </div>
-            <div>
-              <h1 className="font-orbitron font-extrabold text-base sm:text-lg tracking-widest text-cyan-200 stark-text-glow">
-                J.A.R.V.I.S. <span className="text-xs text-cyan-400/80 font-normal">// MARK III MCU CORE</span>
-              </h1>
-              <div className="flex items-center gap-2 text-[11px] text-cyan-400/80 font-mono">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                <span>STATUS: {status} // v3.0.0 (MCU IRON MAN HUD ONLINE)</span>
+    <div className="min-h-screen bg-[#020610] text-cyan-400 font-mono antialiased hex-grid scanlines flex flex-col p-2 sm:p-4">
+      {/* Iron Man Helmet Visor Fullscreen Frame */}
+      <div className={`flex-1 flex flex-col ${visorMode ? 'visor-frame p-3 sm:p-5' : ''}`}>
+        {visorMode && (
+          <>
+            <div className="stark-corner-tl"></div>
+            <div className="stark-corner-tr"></div>
+            <div className="stark-corner-bl"></div>
+            <div className="stark-corner-br"></div>
+          </>
+        )}
+
+        {/* Top Navigation HUD Bar */}
+        <header className="sticky top-0 z-40 bg-slate-950/90 border-b border-cyan-500/40 backdrop-blur-md px-4 py-3 rounded-t-xl shadow-[0_0_25px_rgba(0,243,255,0.2)]">
+          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            {/* Logo & Status */}
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-cyan-950 border-2 border-cyan-400 flex items-center justify-center shadow-[0_0_20px_rgba(0,243,255,0.7)]">
+                <span className="font-orbitron font-extrabold text-sm text-cyan-200">J</span>
+              </div>
+              <div>
+                <h1 className="font-orbitron font-extrabold text-base sm:text-lg tracking-widest text-cyan-200 stark-text-glow">
+                  J.A.R.V.I.S. <span className="text-xs text-cyan-400/80 font-normal">// IRON MAN VISOR HUD</span>
+                </h1>
+                <div className="flex items-center gap-2 text-[11px] text-cyan-400/80 font-mono">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                  <span>STATUS: {status} // v3.0.0 (30 MCU PROTOCOLS ARMED)</span>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Nav Tabs (7 Futuristic Tabs) */}
-          <nav className="flex items-center gap-1.5 p-1 bg-slate-900/80 border border-cyan-500/30 rounded-xl overflow-x-auto max-w-full">
-            {[
-              { id: 'command', label: 'COMMAND DECK', icon: Terminal },
-              { id: 'mobile', label: 'MOBILE CONTROL', icon: Smartphone },
-              { id: 'vision', label: 'VISION & KINETIC', icon: Camera },
-              { id: 'code', label: 'CODE & DOCS FORGE', icon: Code2 },
-              { id: 'telemetry', label: 'TELEMETRY HUD', icon: Activity },
-              { id: 'memory', label: 'MEMORY BANKS', icon: Database },
-              { id: 'automation', label: 'AUTOMATION', icon: Zap },
-            ].map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-orbitron text-xs tracking-wider uppercase transition-all whitespace-nowrap ${
-                    isActive
-                      ? 'bg-cyan-500 text-slate-950 font-bold shadow-[0_0_15px_rgba(0,243,255,0.4)]'
-                      : 'text-cyan-400/80 hover:text-cyan-200 hover:bg-cyan-950/50'
-                  }`}
-                >
-                  <Icon className="w-3.5 h-3.5" />
-                  <span className="hidden md:inline">{tab.label}</span>
-                </button>
-              );
-            })}
-          </nav>
+            {/* Nav Tabs (7 Futuristic Tabs) */}
+            <nav className="flex items-center gap-1.5 p-1 bg-slate-950/90 border border-cyan-500/40 rounded-xl overflow-x-auto max-w-full shadow-[0_0_15px_rgba(0,243,255,0.15)]">
+              {[
+                { id: 'command', label: 'COMMAND DECK', icon: Terminal },
+                { id: 'mobile', label: 'MOBILE CONTROL', icon: Smartphone },
+                { id: 'vision', label: 'VISION & KINETIC', icon: Camera },
+                { id: 'code', label: 'CODE & DOCS FORGE', icon: Code2 },
+                { id: 'telemetry', label: 'TELEMETRY HUD', icon: Activity },
+                { id: 'memory', label: 'MEMORY BANKS', icon: Database },
+                { id: 'automation', label: 'AUTOMATION', icon: Zap },
+              ].map((tab) => {
+                const Icon = tab.icon;
+                const isActive = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-orbitron text-xs tracking-wider uppercase transition-all whitespace-nowrap ${
+                      isActive
+                        ? 'bg-cyan-500 text-slate-950 font-bold shadow-[0_0_15px_rgba(0,243,255,0.6)]'
+                        : 'text-cyan-400/80 hover:text-cyan-200 hover:bg-cyan-950/50'
+                    }`}
+                  >
+                    <Icon className="w-3.5 h-3.5" />
+                    <span className="hidden md:inline">{tab.label}</span>
+                  </button>
+                );
+              })}
+            </nav>
 
-          {/* Right Controls */}
-          <div className="flex items-center gap-3">
-            <div className="hidden lg:flex items-center gap-2 px-3 py-1 bg-cyan-950/60 border border-cyan-500/30 rounded-full text-xs font-mono text-cyan-300">
-              <Cpu className="w-3.5 h-3.5 text-amber-400" />
-              <span>{activeEngine}</span>
-            </div>
+            {/* Right Controls */}
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setVisorMode(!visorMode)}
+                className={`px-3 py-1.5 rounded-lg font-orbitron text-[10px] font-bold uppercase transition-all border ${
+                  visorMode
+                    ? 'bg-cyan-950 text-cyan-200 border-cyan-400 shadow-[0_0_15px_rgba(0,243,255,0.4)]'
+                    : 'bg-slate-950 text-cyan-600 border-cyan-900/50'
+                }`}
+                title="Toggle Fullscreen Iron Man Helmet Visor Mode"
+              >
+                {visorMode ? "🛡️ VISOR HUD: ON" : "🛡️ VISOR HUD: OFF"}
+              </button>
 
-            <button
-              onClick={() => setIsSettingsOpen(true)}
-              className="p-2 bg-slate-900 hover:bg-cyan-950 border border-cyan-500/40 hover:border-cyan-400 rounded-lg text-cyan-300 transition-all shadow-[0_0_10px_rgba(0,243,255,0.1)]"
-              title="J.A.R.V.I.S. Core Configuration"
-            >
-              <SettingsIcon className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-      </header>
+              <div className="hidden lg:flex items-center gap-2 px-3 py-1 bg-cyan-950/80 border border-cyan-500/40 rounded-full text-xs font-mono text-cyan-300">
+                <Cpu className="w-3.5 h-3.5 text-amber-400" />
+                <span>{activeEngine}</span>
+              </div>
 
-      {/* Main Content Viewport */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 space-y-6">
-        {/* Global Voice Visualizer Strip */}
-        <VoiceVisualizer
-          isListening={isListening}
-          isSpeaking={isSpeaking}
-          voiceEnabled={voiceEnabled}
-          onToggleVoice={toggleVoice}
-          onStartListening={startListening}
-          onStopListening={stopListening}
-        />
-
-        {/* Dynamic Tab Renderer */}
-        {activeTab === 'command' && (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            {/* Left: Arc Reactor Core & Status */}
-            <div className="lg:col-span-4 space-y-6">
-              <ArcReactor
-                status={status}
-                isListening={isListening}
-                isSpeaking={isSpeaking}
-                activeEngine={activeEngine}
-                onReactorClick={handleReactorClick}
-              />
-
-              {/* Mini Quick Telemetry Summary */}
-              {telemetry && (
-                <div className="p-4 bg-slate-900/60 border border-cyan-500/30 rounded-xl space-y-3">
-                  <div className="text-xs font-orbitron font-semibold text-cyan-300 uppercase flex items-center justify-between">
-                    <span>SYSTEM DIAGNOSTICS</span>
-                    <span className="text-[10px] text-emerald-400 font-mono">LIVE FEED</span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-                    <div className="p-2 bg-slate-950 rounded border border-cyan-900/40">
-                      <div className="text-cyan-400/70 text-[10px]">CPU LOAD</div>
-                      <div className="text-cyan-100 font-bold">{telemetry.cpu.percent}%</div>
-                    </div>
-                    <div className="p-2 bg-slate-950 rounded border border-cyan-900/40">
-                      <div className="text-cyan-400/70 text-[10px]">MEMORY (RAM)</div>
-                      <div className="text-cyan-100 font-bold">{telemetry.memory.percent}%</div>
-                    </div>
-                    <div className="p-2 bg-slate-950 rounded border border-cyan-900/40">
-                      <div className="text-cyan-400/70 text-[10px]">DISK SPACE</div>
-                      <div className="text-cyan-100 font-bold">{telemetry.disk.percent}%</div>
-                    </div>
-                    <div className="p-2 bg-slate-950 rounded border border-cyan-900/40">
-                      <div className="text-cyan-400/70 text-[10px]">UPTIME</div>
-                      <div className="text-cyan-100 font-bold">{telemetry.uptime}</div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Right: Dialogue Command Deck */}
-            <div className="lg:col-span-8">
-              <ChatInterface
-                messages={messages}
-                onSendMessage={handleSendMessage}
-                isListening={isListening}
-                onStartListening={startListening}
-                onStopListening={stopListening}
-                activeEngine={activeEngine}
-              />
+              <button
+                onClick={() => setIsSettingsOpen(true)}
+                className="p-2 bg-slate-900 hover:bg-cyan-950 border border-cyan-500/40 hover:border-cyan-400 rounded-lg text-cyan-300 transition-all shadow-[0_0_10px_rgba(0,243,255,0.1)]"
+                title="J.A.R.V.I.S. Core Configuration"
+              >
+                <SettingsIcon className="w-4 h-4" />
+              </button>
             </div>
           </div>
-        )}
+        </header>
 
-        {activeTab === 'mobile' && (
-          <MobileDeck
-            onExecuteMobile={handleExecuteMobile}
-            onConnectAdb={handleConnectAdb}
+        {/* Main Content Viewport */}
+        <main className="flex-1 max-w-7xl w-full mx-auto py-6 space-y-6">
+          {/* Global Voice Visualizer Strip */}
+          <VoiceVisualizer
+            isListening={isListening}
+            isSpeaking={isSpeaking}
+            voiceEnabled={voiceEnabled}
+            onToggleVoice={toggleVoice}
+            onStartListening={startListening}
+            onStopListening={stopListening}
           />
-        )}
 
-        {activeTab === 'vision' && (
-          <VisionDeck onAnalyzeVision={handleAnalyzeVision} />
-        )}
+          {/* Dynamic Tab Renderer */}
+          {activeTab === 'command' && (
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+              {/* Left: Arc Reactor Core & Status */}
+              <div className="lg:col-span-4 space-y-6">
+                <ArcReactor
+                  status={status}
+                  isListening={isListening}
+                  isSpeaking={isSpeaking}
+                  activeEngine={activeEngine}
+                  onReactorClick={handleReactorClick}
+                />
 
-        {activeTab === 'code' && (
-          <CodeDeck
-            onGenerateDoc={handleGenerateDoc}
-            onRunCode={handleRunCode}
-          />
-        )}
+                {/* Mini Quick Telemetry Summary */}
+                {telemetry && (
+                  <div className="stark-panel p-4 space-y-3">
+                    <div className="stark-corner-tl"></div>
+                    <div className="stark-corner-tr"></div>
+                    <div className="stark-corner-bl"></div>
+                    <div className="stark-corner-br"></div>
+                    <div className="text-xs font-orbitron font-semibold text-cyan-300 uppercase flex items-center justify-between">
+                      <span>STARK SUIT TELEMETRY</span>
+                      <span className="text-[10px] text-emerald-400 font-mono">LIVE FEED</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+                      <div className="p-2 bg-slate-950 rounded border border-cyan-900/60">
+                        <div className="text-cyan-400/70 text-[10px]">CPU LOAD</div>
+                        <div className="text-cyan-100 font-bold">{telemetry.cpu.percent}%</div>
+                      </div>
+                      <div className="p-2 bg-slate-950 rounded border border-cyan-900/60">
+                        <div className="text-cyan-400/70 text-[10px]">MEMORY (RAM)</div>
+                        <div className="text-cyan-100 font-bold">{telemetry.memory.percent}%</div>
+                      </div>
+                      <div className="p-2 bg-slate-950 rounded border border-cyan-900/60">
+                        <div className="text-cyan-400/70 text-[10px]">DISK SPACE</div>
+                        <div className="text-cyan-100 font-bold">{telemetry.disk.percent}%</div>
+                      </div>
+                      <div className="p-2 bg-slate-950 rounded border border-cyan-900/60">
+                        <div className="text-cyan-400/70 text-[10px]">UPTIME</div>
+                        <div className="text-cyan-100 font-bold">{telemetry.uptime}</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
 
-        {activeTab === 'telemetry' && (
-          <div className="space-y-6">
-            <TelemetryHUD telemetry={telemetry} />
-          </div>
-        )}
+              {/* Right: Dialogue Command Deck */}
+              <div className="lg:col-span-8">
+                <ChatInterface
+                  messages={messages}
+                  onSendMessage={handleSendMessage}
+                  isListening={isListening}
+                  onStartListening={startListening}
+                  onStopListening={stopListening}
+                  activeEngine={activeEngine}
+                />
+              </div>
+            </div>
+          )}
 
-        {activeTab === 'memory' && (
-          <div className="space-y-6">
-            <MemoryDeck
-              facts={facts}
-              onAddFact={handleAddFact}
-              onDeleteFact={handleDeleteFact}
-              onSearchFacts={handleSearchFacts}
+          {activeTab === 'mobile' && (
+            <MobileDeck
+              onExecuteMobile={handleExecuteMobile}
+              onConnectAdb={handleConnectAdb}
             />
-          </div>
-        )}
+          )}
 
-        {activeTab === 'automation' && (
-          <div className="space-y-6">
-            <AutomationDeck
-              macros={macros}
-              onRunMacro={handleRunMacro}
-              onExecuteCommand={handleExecuteCommand}
+          {activeTab === 'vision' && (
+            <VisionDeck onAnalyzeVision={handleAnalyzeVision} />
+          )}
+
+          {activeTab === 'code' && (
+            <CodeDeck
+              onGenerateDoc={handleGenerateDoc}
+              onRunCode={handleRunCode}
             />
-          </div>
-        )}
-      </main>
+          )}
 
-      {/* Footer HUD Bar */}
-      <footer className="bg-slate-950 border-t border-cyan-900/50 py-3 px-4 sm:px-8 text-[11px] font-mono text-cyan-400/70">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-          <div className="flex items-center gap-3">
-            <span>STARK INDUSTRIES // ARTIFICIAL INTELLIGENCE CORE — MARK III (v3.0.0)</span>
-            <span>|</span>
-            <span className="text-cyan-300">USER: {userName.toUpperCase()}</span>
+          {activeTab === 'telemetry' && (
+            <div className="space-y-6">
+              <TelemetryHUD telemetry={telemetry} />
+            </div>
+          )}
+
+          {activeTab === 'memory' && (
+            <div className="space-y-6">
+              <MemoryDeck
+                facts={facts}
+                onAddFact={handleAddFact}
+                onDeleteFact={handleDeleteFact}
+                onSearchFacts={handleSearchFacts}
+              />
+            </div>
+          )}
+
+          {activeTab === 'automation' && (
+            <div className="space-y-6">
+              <AutomationDeck
+                macros={macros}
+                onRunMacro={handleRunMacro}
+                onExecuteCommand={handleExecuteCommand}
+              />
+            </div>
+          )}
+        </main>
+
+        {/* Footer HUD Bar */}
+        <footer className="bg-slate-950/90 border-t border-cyan-500/40 py-3 px-4 sm:px-8 rounded-b-xl text-[11px] font-mono text-cyan-400/80 shadow-[0_0_20px_rgba(0,243,255,0.15)]">
+          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+            <div className="flex items-center gap-3">
+              <span>STARK INDUSTRIES // IRON MAN HELMET VISOR HUD — MARK III (v3.0.0)</span>
+              <span>|</span>
+              <span className="text-cyan-300">USER: {userName.toUpperCase()}</span>
+            </div>
+            <div className="flex items-center gap-4">
+              <span>30 AGENTIC PROTOCOLS ONLINE</span>
+              <span>ALPHA-0 PROTOCOL</span>
+            </div>
           </div>
-          <div className="flex items-center gap-4">
-            <span>30 MOBILE &amp; DESKTOP PROTOCOLS ONLINE</span>
-            <span>ALPHA-0 PROTOCOL</span>
-          </div>
-        </div>
-      </footer>
+        </footer>
+      </div>
 
       {/* Settings Modal */}
       <SettingsModal
