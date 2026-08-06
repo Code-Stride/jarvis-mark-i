@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: jarvis-mark-i
+    env: python
+    buildCommand: "pip install -r backend/requirements.txt && cd frontend && npm install && npm run build"
+    startCommand: "python backend/main.py"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: JARVIS_USER_NAME
+        value: Sir
+      - key: JARVIS_AI_ENGINE
+        value: jarvis-local
+      - key: JARVIS_ALLOW_SHELL
+        value: "true"
+      - key: PORT
+        value: 10000
