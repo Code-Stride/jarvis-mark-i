@@ -1,8 +1,15 @@
 import os
+import sys
+from pathlib import Path
+
+# --- Render.com Node Runtime Python Package Bundling Support ---
+PYPACKAGES_DIR = Path(__file__).resolve().parent.parent / "pypackages"
+if PYPACKAGES_DIR.exists():
+    sys.path.insert(0, str(PYPACKAGES_DIR))
+
 import asyncio
 import json
 import time
-from pathlib import Path
 from typing import List, Optional, Dict, Any
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, Body, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
