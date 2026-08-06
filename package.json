@@ -1,0 +1,15 @@
+{
+  "name": "jarvis-mark-i-root",
+  "version": "3.0.0",
+  "private": true,
+  "description": "J.A.R.V.I.S. Mark III Total Mobile & Desktop Controller Root Config for Render.com",
+  "scripts": {
+    "build": "pip install -r backend/requirements.txt && cd frontend && npm install && npm run build",
+    "start": "python3 backend/main.py",
+    "dev": "./start_jarvis.sh"
+  },
+  "dependencies": {},
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
