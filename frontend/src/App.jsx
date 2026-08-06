@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Terminal, Activity, Database, Zap, Settings as SettingsIcon, 
-  Volume2, VolumeX, Cpu, Shield, Sparkles, RefreshCw, Radio, Camera, Code2 
+  Volume2, VolumeX, Cpu, Shield, Sparkles, RefreshCw, Radio, Camera, Code2, Smartphone 
 } from 'lucide-react';
 
 import ArcReactor from './components/ArcReactor.jsx';
@@ -12,6 +12,7 @@ import MemoryDeck from './components/MemoryDeck.jsx';
 import AutomationDeck from './components/AutomationDeck.jsx';
 import VisionDeck from './components/VisionDeck.jsx';
 import CodeDeck from './components/CodeDeck.jsx';
+import MobileDeck from './components/MobileDeck.jsx';
 import SettingsModal from './components/SettingsModal.jsx';
 
 import { 
@@ -23,7 +24,7 @@ import {
 import { JarvisSpeechEngine } from './services/speech.js';
 
 export default function App() {
-  // Navigation State ("command", "vision", "code", "telemetry", "memory", "automation")
+  // Navigation State ("command", "mobile", "vision", "code", "telemetry", "memory", "automation")
   const [activeTab, setActiveTab] = useState('command');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
@@ -42,12 +43,10 @@ export default function App() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
 
-  // Refs for services
   const speechEngineRef = useRef(null);
   const wsRef = useRef(null);
 
   useEffect(() => {
-    // 1. Initialize Speech Engine
     speechEngineRef.current = new JarvisSpeechEngine({
       onSpeechResult: (transcript) => {
         handleSendMessage(transcript);
@@ -63,7 +62,6 @@ export default function App() {
       }
     });
 
-    // 2. Initialize WebSocket for live telemetry & chat streaming
     wsRef.current = new JarvisWebSocket(
       (telemetryData) => {
         setTelemetry(telemetryData);
@@ -77,12 +75,10 @@ export default function App() {
     );
     wsRef.current.connect();
 
-    // 3. Load initial data
     loadInitialData();
 
-    // 4. Greeting message from J.A.R.V.I.S.
     setTimeout(() => {
-      const greetingText = `Good day, Sir. J.A.R.V.I.S. Mark II Complete AI Desktop & Cloud Assistant is online with all 24 agentic features armed and operational. How may I assist your projects today?`;
+      const greetingText = `Good day, Sir. J.A.R.V.I.S. Mark III Total Mobile & Desktop Controller is online. All 30 agentic mobile and desktop protocols are operational. How may I assist your projects today?`;
       setMessages([
         {
           role: 'assistant',
@@ -276,6 +272,26 @@ export default function App() {
     return res.json();
   };
 
+  // Handler for Mobile Device Control API call
+  const handleExecuteMobile = async (action, target, payload) => {
+    const res = await fetch('/api/mobile', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action, target, payload })
+    });
+    return res.json();
+  };
+
+  // Handler for Android Wireless ADB API call
+  const handleConnectAdb = async (ipAddress) => {
+    const res = await fetch('/api/adb', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ip_address: ipAddress, port: 5555 })
+    });
+    return res.json();
+  };
+
   const toggleVoice = (enabled) => {
     setVoiceEnabled(enabled);
     if (speechEngineRef.current) {
@@ -312,19 +328,20 @@ export default function App() {
             </div>
             <div>
               <h1 className="font-orbitron font-extrabold text-base sm:text-lg tracking-widest text-cyan-200">
-                J.A.R.V.I.S. <span className="text-xs text-cyan-400/80 font-normal">// MARK II CORE</span>
+                J.A.R.V.I.S. <span className="text-xs text-cyan-400/80 font-normal">// MARK III CORE</span>
               </h1>
               <div className="flex items-center gap-2 text-[11px] text-cyan-400/80 font-mono">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                <span>STATUS: {status} // v2.0.0 (24 FEATURES ONLINE)</span>
+                <span>STATUS: {status} // v3.0.0 (TOTAL MOBILE &amp; DESKTOP CONTROL)</span>
               </div>
             </div>
           </div>
 
-          {/* Nav Tabs (6 Futuristic Tabs) */}
+          {/* Nav Tabs (7 Futuristic Tabs) */}
           <nav className="flex items-center gap-1.5 p-1 bg-slate-900/80 border border-cyan-500/30 rounded-xl overflow-x-auto max-w-full">
             {[
               { id: 'command', label: 'COMMAND DECK', icon: Terminal },
+              { id: 'mobile', label: 'MOBILE CONTROL', icon: Smartphone },
               { id: 'vision', label: 'VISION & KINETIC', icon: Camera },
               { id: 'code', label: 'CODE & DOCS FORGE', icon: Code2 },
               { id: 'telemetry', label: 'TELEMETRY HUD', icon: Activity },
@@ -436,6 +453,13 @@ export default function App() {
           </div>
         )}
 
+        {activeTab === 'mobile' && (
+          <MobileDeck
+            onExecuteMobile={handleExecuteMobile}
+            onConnectAdb={handleConnectAdb}
+          />
+        )}
+
         {activeTab === 'vision' && (
           <VisionDeck onAnalyzeVision={handleAnalyzeVision} />
         )}
@@ -479,12 +503,12 @@ export default function App() {
       <footer className="bg-slate-950 border-t border-cyan-900/50 py-3 px-4 sm:px-8 text-[11px] font-mono text-cyan-400/70">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
           <div className="flex items-center gap-3">
-            <span>STARK INDUSTRIES // ARTIFICIAL INTELLIGENCE CORE — MARK II (v2.0.0)</span>
+            <span>STARK INDUSTRIES // ARTIFICIAL INTELLIGENCE CORE — MARK III (v3.0.0)</span>
             <span>|</span>
             <span className="text-cyan-300">USER: {userName.toUpperCase()}</span>
           </div>
           <div className="flex items-center gap-4">
-            <span>24 AGENTIC PROTOCOLS ONLINE</span>
+            <span>30 MOBILE &amp; DESKTOP PROTOCOLS ONLINE</span>
             <span>ALPHA-0 PROTOCOL</span>
           </div>
         </div>

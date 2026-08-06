@@ -1,0 +1,17 @@
+{
+  "name": "J.A.R.V.I.S. Stark AI Core",
+  "short_name": "J.A.R.V.I.S.",
+  "description": "Stark Industries Complete AI Mobile & Desktop Controller",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#040914",
+  "theme_color": "#00f3ff",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "192x192 512x512",
+      "type": "image/x-icon"
+    }
+  ]
+}

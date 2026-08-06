@@ -72,6 +72,15 @@ class DesktopControlRequest(BaseModel):
     target: str
     value: Optional[str] = ""
 
+class MobileControlRequest(BaseModel):
+    action: str
+    target: str
+    payload: Optional[str] = ""
+
+class AdbConnectRequest(BaseModel):
+    ip_address: str
+    port: Optional[int] = 5555
+
 # --- REST Endpoints ---
 
 @app.get("/api/status")
@@ -211,6 +220,16 @@ def execute_desktop_control(request: DesktopControlRequest):
     if action in ["open", "close", "launch", "kill"]:
         return jarvis_tools.desktop_app_control(action, request.target)
     return jarvis_tools.keyboard_mouse_automation(action, request.target, request.value or "")
+
+@app.post("/api/mobile")
+def execute_mobile_control(request: MobileControlRequest):
+    """Execute mobile control commands: App open, Touch tap, Keyevent, SMS, Call, Flashlight, Vibrate."""
+    return jarvis_tools.mobile_device_control(request.action, request.target, request.payload or "")
+
+@app.post("/api/adb")
+def connect_adb(request: AdbConnectRequest):
+    """Connect to an Android device over Wi-Fi for Wireless ADB remote control."""
+    return jarvis_tools.connect_mobile_adb(request.ip_address, request.port or 5555)
 
 @app.get("/api/settings")
 def get_settings():

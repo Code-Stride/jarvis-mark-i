@@ -124,6 +124,49 @@ class AIEngine:
                 cmd_res = automation_engine.run_safe_shell_command(cmd_str)
                 executed_tools.append({"tool": "run_shell_command", "result": cmd_res})
 
+        # -- Tool 13: Mobile Device & App Control (Mark III: "open whatsapp", "open youtube on phone", "call 91...", "turn on flashlight", "vibrate phone") --
+        elif any(w in user_lower for w in ["open whatsapp", "open youtube", "open maps", "open dialer", "call ", "open gmail", "open camera", "open instagram", "open spotify", "turn on flashlight", "vibrate phone", "adb connect", "tap screen", "home button", "back button"]):
+            action = "OPEN_APP"
+            target = "whatsapp"
+            payload = ""
+            if "youtube" in user_lower:
+                target = "youtube"
+            elif "maps" in user_lower or "map" in user_lower:
+                target = "maps"
+            elif "dialer" in user_lower or "call " in user_lower:
+                target = "dialer"
+                call_match = re.search(r"call\s+([0-9\+\-\s]+)", user_message, re.IGNORECASE)
+                if call_match:
+                    payload = call_match.group(1).strip()
+            elif "camera" in user_lower:
+                target = "camera"
+            elif "gmail" in user_lower:
+                target = "gmail"
+            elif "spotify" in user_lower:
+                target = "spotify"
+            elif "flashlight" in user_lower or "torch" in user_lower:
+                action = "FLASHLIGHT"
+                target = "ON"
+            elif "vibrate" in user_lower:
+                action = "VIBRATE"
+                target = "PHONE"
+            elif "adb connect" in user_lower:
+                ip_match = re.search(r"adb\s+connect\s+([0-9\.]+)", user_message, re.IGNORECASE)
+                ip_addr = ip_match.group(1).strip() if ip_match else "192.168.1.10"
+                adb_res = jarvis_tools.connect_mobile_adb(ip_addr)
+                executed_tools.append({"tool": "connect_mobile_adb", "result": adb_res})
+                action = None
+            elif "home button" in user_lower:
+                action = "KEYEVENT"
+                target = "HOME"
+            elif "back button" in user_lower:
+                action = "KEYEVENT"
+                target = "BACK"
+                
+            if action:
+                mob_res = jarvis_tools.mobile_device_control(action, target, payload)
+                executed_tools.append({"tool": "mobile_device_control", "result": mob_res})
+
         # Generate Response
         response_text = ""
         if engine_to_use == "openai" and settings.OPENAI_API_KEY:
@@ -179,6 +222,13 @@ class AIEngine:
                     tool_summaries.append(f"Accessing long-term memory, {user_title}. Active protocols: {facts_str}.")
                 elif t_name == "run_shell_command":
                     tool_summaries.append(f"Terminal command output:\n```\n{t_res['output'][:500]}\n```")
+                elif t_name == "mobile_device_control":
+                    if t_res["action"] == "OPEN_APP":
+                        tool_summaries.append(f"Mobile Intent generated for '{t_res['app'].upper()}', {user_title}. The native app launch protocol has been dispatched to your mobile interface.")
+                    else:
+                        tool_summaries.append(f"Mobile Hardware Command [{t_res['action']}] executed on target '{t_res.get('target', 'device')}'.")
+                elif t_name == "connect_mobile_adb":
+                    tool_summaries.append(f"Wireless ADB connection protocol initiated for Android target {t_res['device']}, {user_title}. Status: {t_res['message']}")
             return "\n\n".join(tool_summaries)
 
         if any(w in user_lower for w in ["who are you", "what can you do", "help", "capabilities", "introduce yourself"]):

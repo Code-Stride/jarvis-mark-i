@@ -289,4 +289,19 @@ class JarvisTools:
             "explanation": f"Generated modular {language} code block for '{prompt}' using Stark-Tech architectural standards."
         }
 
+    # 9. Mobile Device Automation & Hardware Control (Mark III)
+    def mobile_device_control(self, action: str, target: str = "", payload: str = "") -> Dict[str, Any]:
+        """
+        Execute mobile control commands: App open, Touch tap, Keyevent, SMS, Call, Flashlight, Vibrate.
+        """
+        from mobile_automation import mobile_automation_engine
+        return mobile_automation_engine.execute_mobile_action(action, target, payload)
+
+    def connect_mobile_adb(self, ip_address: str, port: int = 5555) -> Dict[str, Any]:
+        """
+        Connect to an Android phone over Wi-Fi for Wireless ADB remote control.
+        """
+        from mobile_automation import mobile_automation_engine
+        return mobile_automation_engine.connect_adb_device(ip_address, port)
+
 jarvis_tools = JarvisTools()
