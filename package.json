@@ -4,7 +4,8 @@
   "private": true,
   "description": "J.A.R.V.I.S. Mark III Total Mobile & Desktop Controller Root Config for Render.com",
   "scripts": {
-    "build": "pip install -r backend/requirements.txt && cd frontend && npm install && npm run build",
+    "postinstall": "(pip3 install -r requirements.txt --break-system-packages || pip3 install -r requirements.txt --user || pip3 install -r requirements.txt) && cd frontend && npm install && npm run build",
+    "build": "(pip3 install -r requirements.txt --break-system-packages || pip3 install -r requirements.txt --user || pip3 install -r requirements.txt) && cd frontend && npm install && npm run build",
     "start": "python3 backend/main.py",
     "dev": "./start_jarvis.sh"
   },
