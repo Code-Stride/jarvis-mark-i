@@ -11,7 +11,7 @@ echo "   J.A.R.V.I.S. MARK I ARTIFICIAL INTELLIGENCE CORE   "
 echo "   Version 1.0.0 (Stark-Tech Prototype)               "
 echo "======================================================"
 echo "[1/2] Initializing Python FastAPI Neural Backend on port 8000..."
-./venv/bin/python backend/main.py &
+python3 backend/main.py &
 BACKEND_PID=$!
 
 # Wait 2 seconds for backend to initialize
